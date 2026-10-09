@@ -5,8 +5,10 @@ import ProductCard from './components/ProductCard';
 import ProductDetail from './components/ProductDetail';
 import Cart from './components/Cart';
 import Checkout from './components/Checkout';
+import FruitShop from './components/FruitShop';
 
 export default function App() {
+  const [currentModule, setCurrentModule] = useState<'coffee' | 'fruit'>('coffee');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('全部');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
@@ -77,12 +79,40 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-cream">
-      <Header
-        cartCount={cartCount}
-        onCartClick={() => setIsCartOpen(true)}
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-      />
+      {/* Module Switcher */}
+      <div className="fixed top-4 right-4 z-50 flex gap-2">
+        <button
+          onClick={() => setCurrentModule('coffee')}
+          className={`px-4 py-2 rounded-full font-medium transition-all ${
+            currentModule === 'coffee'
+              ? 'bg-brown-700 text-cream shadow-lg'
+              : 'bg-white text-brown-700 hover:bg-brown-100'
+          }`}
+        >
+          ☕ 咖啡
+        </button>
+        <button
+          onClick={() => setCurrentModule('fruit')}
+          className={`px-4 py-2 rounded-full font-medium transition-all ${
+            currentModule === 'fruit'
+              ? 'bg-green-600 text-white shadow-lg'
+              : 'bg-white text-green-700 hover:bg-green-100'
+          }`}
+        >
+          🍎 水果
+        </button>
+      </div>
+
+      {currentModule === 'fruit' ? (
+        <FruitShop />
+      ) : (
+        <>
+          <Header
+            cartCount={cartCount}
+            onCartClick={() => setIsCartOpen(true)}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+          />
 
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-brown-800 text-cream">
@@ -227,6 +257,8 @@ export default function App() {
           onClose={() => setIsCheckoutOpen(false)}
           onComplete={handleCheckoutComplete}
         />
+      )}
+        </>
       )}
     </div>
   );
